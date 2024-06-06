@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Strangers</string>
+    <string name="default_web_client_id" translatable="false">1:295400822239:android:0dc60154b07e718a58606a</string>
 </resources>

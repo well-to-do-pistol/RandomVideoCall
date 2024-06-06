@@ -1,4 +1,4 @@
-package com.example.strangers;
+package com.example.strangers.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.strangers.R;
+import com.google.firebase.auth.FirebaseAuth;
+
 public class WelcomeActivity extends AppCompatActivity {
+
+    FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +28,22 @@ public class WelcomeActivity extends AppCompatActivity {
             return insets;
         });
 
+        auth = FirebaseAuth.getInstance();
+
+        if (auth.getCurrentUser() != null){
+            goToNextActivity();
+        }
+
         findViewById(R.id.getStarted).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
-                finish();
+                goToNextActivity();
             }
         });
+    }
+
+    void goToNextActivity(){
+        startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+        finish();
     }
 }
