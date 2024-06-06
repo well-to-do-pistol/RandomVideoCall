@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.example.strangers.R;
 import com.example.strangers.databinding.ActivityMainBinding;
 import com.example.strangers.models.User;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -49,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        new Thread(
+                () -> {
+                    // Initialize the Google Mobile Ads SDK on a background thread.
+                    MobileAds.initialize(this, initializationStatus -> {});
+                })
+                .start();
 
         progress = KProgressHUD.create(this); //------------------------------------------
         progress.setDimAmount(0.5f);          //制造阴影
