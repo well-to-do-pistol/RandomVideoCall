@@ -47,7 +47,7 @@
             android:id="@+id/coins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="You have 50"
+            android:text="You have 0"
             android:textColor="@color/white" />
 
         <ImageView
@@ -113,7 +113,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:fontFamily="@font/roboto_bold"
-        android:text="100"
+        android:text="0"
         android:textColor="@color/white"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView"

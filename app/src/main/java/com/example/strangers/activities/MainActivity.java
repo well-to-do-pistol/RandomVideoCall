@@ -25,6 +25,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.kaopiz.kprogresshud.KProgressHUD;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private int requestCode = 1;
 
     User user;
-
+    KProgressHUD progress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        progress = KProgressHUD.create(this); //------------------------------------------
+        progress.setDimAmount(0.5f);          //制造阴影
+        progress.show();                      //------------------------------------------
+
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
 
@@ -59,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                                 .addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        progress.dismiss(); //------------------------------------------
                                         user = snapshot.getValue(User.class);
                                         coins = user.getCoins();
 
