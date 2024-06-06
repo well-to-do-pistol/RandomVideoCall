@@ -82,6 +82,7 @@ public class ConnectingActivity extends AppCompatActivity {
                                 intent.putExtra("createdBy", createdBy);
                                 intent.putExtra("isAvailable", isAvailable);
                                 startActivity(intent);
+                                finish();
                             }
                         }else {
                             // Not Available
@@ -119,6 +120,7 @@ public class ConnectingActivity extends AppCompatActivity {
                                                                     intent.putExtra("createdBy", createdBy);
                                                                     intent.putExtra("isAvailable", isAvailable);
                                                                     startActivity(intent);
+                                                                    finish();
                                                                 }
                                                             }
                                                         }

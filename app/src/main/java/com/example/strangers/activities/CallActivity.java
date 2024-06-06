@@ -17,9 +17,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.strangers.R;
 import com.example.strangers.databinding.ActivityCallBinding;
 import com.example.strangers.models.InterfaceJava;
+import com.example.strangers.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -66,10 +68,12 @@ public class CallActivity extends AppCompatActivity {
         String incoming = getIntent().getStringExtra("incoming"); //房间主人的话是自己, 客人也是自己
         createdBy = getIntent().getStringExtra("createdBy");
 
-        friendsUsername = "";
+//        friendsUsername = "";
+//
+//        if(incoming.equalsIgnoreCase(friendsUsername)) //忽略大小写
+//            friendsUsername = incoming;
 
-        if(incoming.equalsIgnoreCase(friendsUsername)) //忽略大小写
-            friendsUsername = incoming;
+        friendsUsername = incoming;
 
         setupWebView();
 
@@ -99,6 +103,12 @@ public class CallActivity extends AppCompatActivity {
             }
         });
 
+        binding.endCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 
@@ -138,15 +148,58 @@ public class CallActivity extends AppCompatActivity {
         callJavaScriptFunction("javascript:init(\"" + uniqueId + "\")"); //这是一个以唯一ID作为参数的JavaScript函数
 
         if(createdBy.equalsIgnoreCase(username)){ //如果当前为房主
+            if (pageExit)
+                return;
             firebaseRef.child(username).child("connId").setValue(uniqueId); //加一个connId设为新的UUID
             firebaseRef.child(username).child("isAvailable").setValue(true);
 
+            binding.loadingGroup.setVisibility(View.GONE);
             binding.controls.setVisibility(View.VISIBLE); //controls包含了3个按钮
+
+            FirebaseDatabase.getInstance().getReference()
+                    .child("profiles")
+                    .child(friendsUsername)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            User user = snapshot.getValue(User.class);
+
+                            Glide.with(CallActivity.this).load(user.getProfile())
+                                    .into(binding.profile);
+                            binding.name.setText(user.getName());
+                            binding.city.setText(user.getCity());
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
         }else {
             new Handler().postDelayed(new Runnable() { //创建线程2秒后执行
                 @Override
                 public void run() {
                     friendsUsername = createdBy; //friendsUsername为房主id
+                    FirebaseDatabase.getInstance().getReference()
+                            .child("profiles")
+                            .child(friendsUsername)
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    User user = snapshot.getValue(User.class);
+
+                                    Glide.with(CallActivity.this).load(user.getProfile())
+                                            .into(binding.profile);
+                                    binding.name.setText(user.getName());
+                                    binding.city.setText(user.getCity());
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
                     FirebaseDatabase.getInstance().getReference()
                             .child("users")
                             .child(friendsUsername)
@@ -165,7 +218,7 @@ public class CallActivity extends AppCompatActivity {
                                 }
                             });
                 }
-            },10000);
+            },4000);
         }
 
     }
@@ -191,6 +244,7 @@ public class CallActivity extends AppCompatActivity {
                     return;
                 }
 
+                binding.loadingGroup.setVisibility(View.GONE);
                 binding.controls.setVisibility(View.VISIBLE); //只要有connId
                 String connId = snapshot.getValue(String.class);
                 callJavaScriptFunction("javascript:startCall(\""+connId+"\")"); //用connId开启VideoCall
@@ -214,5 +268,13 @@ public class CallActivity extends AppCompatActivity {
 
     String getUniqueId(){ //获取独有id
         return UUID.randomUUID().toString();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        pageExit = true;
+        firebaseRef.child(createdBy).setValue(null);
+        finish();
     }
 }

@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private int requestCode = 1;
 
     User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +80,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(isPermissionsGranted()){
                     if(coins > 5){
+                        coins = coins - 5;
+                        database.getReference().child("profiles")
+                                .child(currentUSer.getUid())
+                                .child("coins")
+                                .setValue(coins);
                         Intent intent = new Intent(MainActivity.this, ConnectingActivity.class);
                         intent.putExtra("profile", user.getProfile());
                         startActivity(intent);
@@ -92,6 +98,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        binding.rewardBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, RewardActivity.class));
+            }
+        });
 
     }
 

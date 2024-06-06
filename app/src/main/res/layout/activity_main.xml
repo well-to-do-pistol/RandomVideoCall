@@ -76,7 +76,7 @@
         app:layout_constraintTop_toTopOf="@+id/imageView5">
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/rewardBtn"
             android:layout_width="18dp"
             android:layout_height="16dp"
             android:layout_weight="1"
