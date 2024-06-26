@@ -3,40 +3,44 @@ Strangers(随机视频聊天):
 零:
 
 > 1.用mikhaellopez:circularimageview库放置圆图, 在xml设置好
-
-2.用Glide库显示图片
-
-3.用ActivityMainBinding来绑定xml(每创建一个activity自动生成一个binding )
-
-4.使用WebRTC视频服务, 以服务器为中间人请求和响应, 后续通信点对点;
-将WebRTC文件放到assets下
-
-5.连接时用lottie弄一个等待页面
-
-6.在flaticon网站找图片元素
+>
+> 2.用Glide库显示图片
+>
+> 3.用ActivityMainBinding来绑定xml(每创建一个activity自动生成一个binding )
+>
+> 4.使用WebRTC视频服务, 以服务器为中间人请求和响应, 后续通信点对点;
+> 将WebRTC文件放到assets下
+>
+> 5.连接时用lottie弄一个等待页面
+>
+> 6.在flaticon网站找图片元素
 
 1.  LoginActivity(GoogleLogin):
 
 ```{=html}
-<!-- -->
+
 ```
+
 1.  用得到的AuthCredential获得当前user保存在RealtimeDB 的profiles下
 
 2.  将相机和音频权限放到集合, 通知申请
 
 ```{=html}
-<!-- -->
+
 ```
+
 2.  MainActivity:
 
 ```{=html}
-<!-- -->
+
 ```
+
 1.  用lottie库, 把动图json文件放到res下创建的raw下, 在xml设置好
 
 ```{=html}
-<!-- -->
+
 ```
+
 3.  ConnectingActivity:
 
 > 1\. 用lottie库, 把动图json文件放到res下创建的raw下, 在xml设置好
